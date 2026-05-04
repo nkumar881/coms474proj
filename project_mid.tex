@@ -16,95 +16,188 @@
 \begin{document}
 
 \begin{center}
-{\Large \textbf{Your Project Title}
+{\Large \textbf{Midterm project}}
 
 \vspace{10pt}
 
-Project Midterm Report}
+Nikhil Kumar
 
 \vspace{10pt}
 
-\textit{Team Members: xxx1, xxx2, xxx3}
+\textit{March 2026}
 \end{center}
-
-% \linethickness{1mm}\line(1,0){498}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{abstract}
-  Put your abstract here. It should be a brief summary of your
-  task, motivation, algorithm, and results. Please keep it about
-  150 words.
-\end{abstract}
-
-{\color{red} The length of your midterm report should be at least
-3 pages not including references. Please replace contents with
-your report contents, and then delete this paragraph.
-
-Note that for groups with only one student, the requirement for
-this midterm report length is 2 excluding references. You can
-change the length of each part proportionally.}
 
 \section{Introduction}
 
-Use several paragraphs to introduce the background, machine
-learning tasks, the dataset you use, your target machine learning
-models, and your expected outcomes.
+The Remaining Useful Life (RUL) of the mechanical systems is a key issue,
+which needs to be predicted in the context of predictive maintenance. Unex-
+pected engine failures may cause a great deal of financial losses and even serious
+safety risks in such industries as aviation. Conventional maintenance plans such
+as planned and reactive maintenance are not usually efficient since they either
+prematurely replace parts or maintain them without stopping failures. Conse-
+quently, more and more interest in data-driven methods that can approximate
+system health and anticipate failures before they happen is growing.
+
+The project at hand is concerned with the prediction of Remaining Use-
+ful Life of jet engines based on NASA CMAPSS (Commercial Modular Aero-
+Propulsion System Simulation) data [1]. This data has multivariate time-series
+data of various engines at different conditions up to failure. At each time step,
+operational settings and several sensor measurements are available and the goal
+is to make a forecast of the number of cycles to go before an engine fails.
+
+This is a regression time-series problem, and the model has to acquire degra-
+dation tendencies over time. To find a solution to this, we apply baseline ma-
+chine learning models and a deep learning methodology. In particular, we com-
+pare linear regression and random forest regression to a 1D Convolutional Neural
+Network (CNN) that is implemented to extract the temporal relationships in
+sequential data. This project aims at assessing the performance of these mod-
+els and find out whether deep learning techniques can enhance the accuracy of
+prediction when estimating the RUL.
 
 \section{Related Work}
 
-Please briefly introduce some related works to your project. The
-related work could be some papers related to your machine
-learning algorithm.
+The prediction of Remaining Useful Life (RUL) is a predictive maintenance
+technique that has been extensively studied and referenced in relation to its
+importance in ensuring that systems are made more reliable and that operation
+costs are minimized. Degradation is a characteristic of complex systems like
+aircraft engines that is affected by changes in different sensor measurements;
+therefore, degradation is more applicable to data-driven approaches.
 
-Usually, this part accounts for 0.5 page. Here, you can list one
-or two related works for midterm. The final version could be
-finished in the final report.
+As a basic approach to RUL prediction, traditional machine learning ap-
+proaches have been used, which include linear regression and tree-based ap-
+proaches. However, these approaches are deemed ineffective in capturing time-
+based dependencies that are characteristic of sequence-based data. In addition,
+to address this limitation of traditional approaches, recent studies have been
+conducted on deep learning approaches, particularly those that are based on
+sequence-based approaches like RNN and LSTM [2].
 
-\section{Your methods name}
+More recently, time-series prediction tasks (and RUL estimation) have also
+been performed by using Convolutional Neural Networks (CNNs) [3]. CNNs
+can capture local temporal features and have few parameters than recurrent
+ones which is computationally efficient and yet capable of obtaining good per-
+formance.
 
-In this section, you will introduce your machine learning
-algorithms used in this part.
+In the given project, we feed a 1D CNN model with the engine sensor data to
+identify time-related trends in the data and compare its functionality to other
+baseline models, including linear regression, and random forest regression. This
+will enable us to assess the claim that deep learning methods have a quantifiable
+benefit in predicting RUL on the NASA CMAPSS dataset.
 
-If you are using existing methods on a \textbf{new dataset}. You
-can talk about ``dataset collection'', ``data pre-processing'',
-``Feature selection'', ``Choices of hyper-parameter'',
-``Evaluation metrics'', etc.
+\section{Methods}
 
-If you propose some \textbf{new methods}. You can talk about
-``Drawbacks of existing methods'', ``Your proposed methods'',
-``Your models based on your methods'', etc.
+\subsection{Dataset and Preprocessing}
 
-These are possible subsections in this part. You don't need to
-include all of them. I want to see the contents that you spend
-time on and have some insights.
+We utilize a benchmark dataset named NASA CMAPSS FD001. This dataset
+is a multivariate time series dataset that contains information collected from
+multiple jet engines running under a single condition with one fault mode. Each
+row in this dataset corresponds to a single engine cycle. It contains information
+about an engine's identifier, cycle number, three operational setting values, and
+twenty-one sensor values.
 
-This part is one of the most important sections. The length of this
-section should be about 1.5 pages.
+The training dataset has complete run-to-failure trajectories for every single
+engine. This enables us to calculate the remaining useful life. In this dataset,
+we calculate the remaining useful life for every single time step. This is done
+by subtracting the current cycle number from the maximum cycle number for
+every single engine.
+
+In the pre-processing step, we loaded the raw data files. This is done using
+a whitespace-separated parsing mechanism. Trailing empty columns were also
+removed. Every single column is given a specific name corresponding to every
+single engine's identifier, cycle number, operational setting values, and sensor
+values.
+
+\subsection{Feature Engineering}
+
+To build the input features, the engine ID and cycle number were removed to
+prevent the use of identification variables or absolute time as a predictor. The
+remaining operational variables and sensor readings were used as the features.
+Standardization of the numeric features was performed by applying a standard
+scaling technique.
+
+\subsection{Models}
+
+Two baseline regression models were implemented for comparison:
+
+\begin{itemize}
+\item Linear Regression: A simple model that assumes a linear relationship
+between input features and the target variable.
+\item Random Forest Regression: An ensemble-based model that captures
+nonlinear relationships and interactions between features.
+\end{itemize}
+
+To prevent data leakage across time steps coming from the same engine, an
+engine-level train validation split is used. This ensures that all cycles from a
+given engine occur within only one split.
+
+\subsection{Evaluation Metrics}
+
+Model performance was evaluated using two standard regression metrics:
+
+\begin{itemize}
+\item Mean Absolute Error (MAE): Measures the average absolute differ-
+ence between predicted and true RUL values.
+\item Root Mean Squared Error (RMSE): Measures the square root of the
+average squared differences, placing greater emphasis on larger errors.
+\end{itemize}
 
 \section{Preliminary Results}
 
-In this section, you will list some experimental results with
-some comparisons with some baseline methods.
+Preliminary experiments were performed on the NASA CMAPSS FD001 dataset
+to assess baseline performance on the Remaining Useful Life (RUL) prediction
+task. This dataset has 20,631 training samples and 13,096 test samples, each of
+which is associated with 100 engines.
 
-For example, you choose to use SVM on a new dataset. Possible
-baselines would be linear perceptron and logistic regression by
-using the same set of features.
+Two baseline models, Linear Regression and Random Forest Regression,
+were trained on standardized features from sensors and operations. For evalua-
+tion, a validation split was used on an engine level to prevent leakage.
 
-In this midterm report, you can use a table to show some
-preliminary results along with some discussions. This part should
-be about 0.5 page.
+The results are given below:
+
+\begin{itemize}
+\item Random Forest Regression: MAE = 25.874, RMSE = 35.400
+\item Linear Regression: MAE = 30.111, RMSE = 38.133
+\end{itemize}
+
+The results show the superiority of the Random Forest model over Linear
+Regression, which confirms the importance of nonlinear relationships in the
+sensor data for the prediction of RUL. However, the results show the limitation
+of both models in handling the temporal degradation patterns in the data.
+
+The above results show the importance of using sequence-based models, such
+as Convolutional Neural Networks (CNNs), which are more efficient in handling
+the temporal dependencies in the engine degradation data. Further work will
+be done in this direction to improve the prediction accuracy.
 
 \section{Future plan}
 
-In this section, briefly discuss your plan based on current
-achievements.
+On the basis of these preliminary results, further research will be conducted to
+enhance the performance of the models by incorporating techniques for tempo-
+ral modeling. For this purpose, sequence-based models, such as Convolutional
+Neural Networks (CNN), will be incorporated for better degradation pattern
+recognition. Further improvements in this research will be made by trying out
+different window sizes for sequence generation, tuning the parameters of the
+models, and exploring feature selection techniques for identifying the best sen-
+sors. Further evaluation of the models will be conducted by employing both
+MAE and RMSE for assessing the models' performance against different error
+measures. Moreover, a comparative study of baseline models and deep learning
+models will be conducted to evaluate the effectiveness of temporal models in
+enhancing the accuracy of predicted Remaining Useful Life.
 
 \section{References}
 
-Please include your references here.
+References
+
+[1] A. Saxena, K. Goebel, D. Simon, and N. Eklund, ``Damage Propaga-
+tion Modeling for Aircraft Engine Run-to-Failure Simulation,'' International
+Conference on Prognostics and Health Management, 2008.
+
+[2] S. Zheng, K. Ristovski, A. Farahat, and C. Gupta, ``Long Short-Term Mem-
+ory Network for Remaining Useful Life Estimation,'' IEEE International
+Conference on Prognostics and Health Management, 2017.
+
+[3] X. Li, Q. Ding, and J. Sun, ``Remaining Useful Life Estimation in Prognos-
+tics Using Deep Convolution Neural Networks,'' Reliability Engineering \&
+System Safety, 2018.
 
 
 \end{document}

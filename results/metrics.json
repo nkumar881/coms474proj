@@ -1,0 +1,38 @@
+{
+  "validation": [
+    {
+      "model": "Linear Regression",
+      "MAE": 16.4835502620989,
+      "RMSE": 20.410926787699804
+    },
+    {
+      "model": "Random Forest",
+      "MAE": 12.557991400491401,
+      "RMSE": 17.16697445023975
+    },
+    {
+      "model": "1D CNN (window=30)",
+      "MAE": 13.717355728149414,
+      "RMSE": 17.94498428356793
+    }
+  ],
+  "test": [
+    {
+      "model": "Linear Regression",
+      "MAE": 16.56873644302419,
+      "RMSE": 20.830452418997652
+    },
+    {
+      "model": "Random Forest",
+      "MAE": 12.009400000000003,
+      "RMSE": 17.046425211756276
+    },
+    {
+      "model": "1D CNN (window=30)",
+      "MAE": 15.093161582946777,
+      "RMSE": 20.284939987172827
+    }
+  ],
+  "window": 30,
+  "rul_cap": 125
+}
